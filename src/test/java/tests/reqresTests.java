@@ -1,9 +1,14 @@
+package tests;
+
+import models.LoginBodyModel;
+import models.LoginResponseModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class reqresTests extends TestBase {
@@ -12,9 +17,12 @@ public class reqresTests extends TestBase {
     @Test
     void successfulRegistrationTest() {
 
-        String regData = "{\"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\"}";
+        LoginBodyModel regData = new LoginBodyModel();
 
-        given()
+        regData.setEmail("eve.holt@reqres.in");
+        regData.setPassword("pistol");
+
+        LoginResponseModel responce = given()
                 .body(regData)
                 .contentType(JSON)
                 .log().uri()
@@ -26,7 +34,9 @@ public class reqresTests extends TestBase {
                 .log().status()
                 .log().body()
                 .statusCode(200)
-                .body("token", is("QpwL5tke4Pnpja7X4"));
+                .extract().as(LoginResponseModel.class);
+
+        assertEquals("QpwL5tke4Pnpja7X4", responce.getToken());
     }
 
     @DisplayName("Запрос на попытку регистрации без пароля. POST - UNSUCCESSFUL REGISTRATION")

@@ -17,6 +17,7 @@ compileTestJava {
 dependencies {
     testImplementation(
             'io.rest-assured:rest-assured:5.3.1',
+            "io.rest-assured:json-schema-validator:5.3.1",
             'org.junit.jupiter:junit-jupiter-engine:5.11.2',
             'org.slf4j:slf4j-simple:2.0.16'
     )
