@@ -1,7 +1,7 @@
 package tests;
 
-import models.pojo.LoginBodyModel;
-import models.pojo.LoginResponseModel;
+import models.lombok.LoginBodyLombokModel;
+import models.lombok.LoginResponseLombokModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,18 +11,18 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class reqresTests extends TestBase {
+public class reqresLombokTests extends TestBase {
 
     @DisplayName("Запрос на регистрацию пользователя. POST - SUCCESSFUL REGISTRATION")
     @Test
     void successfulRegistrationTest() {
 
-        LoginBodyModel regData = new LoginBodyModel();
+        LoginBodyLombokModel regData = new LoginBodyLombokModel();
 
         regData.setEmail("eve.holt@reqres.in");
         regData.setPassword("pistol");
 
-        LoginResponseModel responce = given()
+        LoginResponseLombokModel responce = given()
                 .body(regData)
                 .contentType(JSON)
                 .log().uri()
@@ -34,7 +34,7 @@ public class reqresTests extends TestBase {
                 .log().status()
                 .log().body()
                 .statusCode(200)
-                .extract().as(LoginResponseModel.class);
+                .extract().as(LoginResponseLombokModel.class);
 
         assertEquals("QpwL5tke4Pnpja7X4", responce.getToken());
     }
