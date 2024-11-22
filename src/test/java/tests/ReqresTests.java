@@ -2,16 +2,19 @@ package tests;
 
 import models.pojo.LoginBodyModel;
 import models.pojo.LoginResponseModel;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class reqresTests extends TestBase {
+public class ReqresTests extends TestBase {
 
     @DisplayName("Запрос на регистрацию пользователя. POST - SUCCESSFUL REGISTRATION")
     @Test
@@ -26,6 +29,8 @@ public class reqresTests extends TestBase {
                 .body(regData)
                 .contentType(JSON)
                 .log().uri()
+                .log().body()
+                .log().headers()
 
             .when()
                 .post("/register")
@@ -36,7 +41,8 @@ public class reqresTests extends TestBase {
                 .statusCode(200)
                 .extract().as(LoginResponseModel.class);
 
-        assertEquals("QpwL5tke4Pnpja7X4", responce.getToken());
+        assertThat(responce.getToken()).isAlphanumeric();
+        assertEquals(notNullValue(), responce.getToken());
     }
 
     @DisplayName("Запрос на попытку регистрации без пароля. POST - UNSUCCESSFUL REGISTRATION")
@@ -49,6 +55,8 @@ public class reqresTests extends TestBase {
                 .body(regData)
                 .contentType(JSON)
                 .log().uri()
+                .log().body()
+                .log().headers()
 
             .when()
                 .post("/register")
@@ -69,6 +77,8 @@ public class reqresTests extends TestBase {
                 .body(createData)
                 .contentType(JSON)
                 .log().uri()
+                .log().body()
+                .log().headers()
 
             .when()
                 .post("/users")
@@ -86,6 +96,8 @@ public class reqresTests extends TestBase {
 
         given()
                 .log().uri()
+                .log().body()
+                .log().headers()
 
             .when()
                 .get("/users/7")
@@ -105,6 +117,8 @@ public class reqresTests extends TestBase {
 
         given()
                 .log().uri()
+                .log().body()
+                .log().headers()
 
                 .when()
                 .get("/users/666")

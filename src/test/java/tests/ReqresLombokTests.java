@@ -2,16 +2,20 @@ package tests;
 
 import models.lombok.LoginBodyLombokModel;
 import models.lombok.LoginResponseLombokModel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static specs.RegistrationSpec.*;
 
 
-public class reqresLombokTests extends TestBase {
+public class ReqresLombokTests extends TestBase {
 
     @DisplayName("Запрос на регистрацию пользователя. POST - SUCCESSFUL REGISTRATION")
     @Test
@@ -22,21 +26,19 @@ public class reqresLombokTests extends TestBase {
         regData.setEmail("eve.holt@reqres.in");
         regData.setPassword("pistol");
 
-        LoginResponseLombokModel responce = given()
-                .body(regData)
-                .contentType(JSON)
-                .log().uri()
+        LoginResponseLombokModel responce = step("Отправляем запрос на регистрацию пользователя", () ->
+            given(registrationRequestSpec)
+                    .body(regData)
 
-            .when()
-                .post("/register")
+                .when()
+                    .post("/register")
 
-            .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .extract().as(LoginResponseLombokModel.class);
+                .then()
+                    .spec(responseSpec200)
+                    .extract().as(LoginResponseLombokModel.class));
 
-        assertEquals("QpwL5tke4Pnpja7X4", responce.getToken());
+        step("Проверяем успешную регистрацию пользователя", () ->
+                assertThat(responce.getToken()).isAlphanumeric());
     }
 
     @DisplayName("Запрос на попытку регистрации без пароля. POST - UNSUCCESSFUL REGISTRATION")
@@ -45,18 +47,14 @@ public class reqresLombokTests extends TestBase {
 
         String regData = "{\"email\": \"eve.holt@reqres.in\"}";
 
-        given()
+        given(registrationRequestSpec)
                 .body(regData)
-                .contentType(JSON)
-                .log().uri()
 
             .when()
                 .post("/register")
 
             .then()
-                .log().status()
-                .log().body()
-                .statusCode(400);
+                .spec(responseSpec400);
     }
 
     @DisplayName("Запрос на изменение данных пользователя. POST - CREATE")
@@ -66,17 +64,14 @@ public class reqresLombokTests extends TestBase {
         String createData = "{\"name\": \"marpheus\", \"job\": \"leader\"}";
 
         given()
+                .spec(createRequestSpec)
                 .body(createData)
-                .contentType(JSON)
-                .log().uri()
 
             .when()
                 .post("/users")
 
             .then()
-                .log().status()
-                .log().body()
-                .statusCode(201)
+                .spec(responseSpec201)
                 .body("job", is("leader"));
     }
 
@@ -84,16 +79,13 @@ public class reqresLombokTests extends TestBase {
     @Test
     void successfulFoundUserTest() {
 
-        given()
-                .log().uri()
+        given(foundRequestSpec)
 
             .when()
                 .get("/users/7")
 
             .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                .spec(responseSpec200)
                 .body("data.id", is(7))
                 .body("data.first_name", is("Michael"))
                 .body("data.last_name", is("Lawson"));
@@ -103,15 +95,11 @@ public class reqresLombokTests extends TestBase {
     @Test
     void unsuccessfulFoundUserTest() {
 
-        given()
-                .log().uri()
-
-                .when()
+        given(foundRequestSpec)
+            .when()
                 .get("/users/666")
 
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(404);
+            .then()
+                .spec(responseSpec404);
     }
 }

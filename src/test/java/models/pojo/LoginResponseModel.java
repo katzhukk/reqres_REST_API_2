@@ -9,6 +9,5 @@ public class LoginResponseModel {
         this.token = token;
     }
 
-    //        String regData = "{\"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\"}";
     String token;
 }
