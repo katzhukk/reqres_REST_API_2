@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static specs.RegistrationSpec.*;
 
 
@@ -62,7 +62,6 @@ public class ReqresLombokTests extends TestBase {
     void successfulCreateTest() {
 
         CreateBodyLombokModel createData = new CreateBodyLombokModel();
-
         createData.setName("marpheus");
         createData.setJob("leader");
 
@@ -79,7 +78,10 @@ public class ReqresLombokTests extends TestBase {
                 .extract().as(CreateResponceLombokModel.class));
 
         step("Проверяем успешное изменение данных пользователя", () ->
-                Assertions.assertEquals(responce.getJob(), "leader"));
+                {
+                    assertEquals(responce.getName(), "marpheus");
+                    assertEquals(responce.getJob(), "leader");
+                });
     }
 
     @DisplayName("Запрос на поиск пользователя по id. GET - SINGLE USER")
@@ -97,9 +99,9 @@ public class ReqresLombokTests extends TestBase {
 
         step("Проверяем данные найденного пользователя", () ->
                 {
-                    Assertions.assertEquals(responce.getData().get(0).getId(), 7);
-                    Assertions.assertEquals(responce.getData().get(2).getFirst_name(), "Michael");
-                    Assertions.assertEquals(responce.getData().get(3).getLast_name(), "Lawson");
+                    assertEquals(responce.getData().get(0).getId(), 7);
+                    assertEquals(responce.getData().get(2).getFirst_name(), "Michael");
+                    assertEquals(responce.getData().get(3).getLast_name(), "Lawson");
                 });
     }
 

@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class CreateResponceLombokModel {
-    String job;
+    String name, job;
 }
