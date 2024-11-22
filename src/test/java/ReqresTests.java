@@ -1,8 +1,5 @@
-package tests;
-
 import models.pojo.LoginBodyModel;
 import models.pojo.LoginResponseModel;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
