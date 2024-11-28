@@ -22,7 +22,7 @@ public class ReqresLombokTests extends TestBase {
         regData.setEmail("eve.holt@reqres.in");
         regData.setPassword("pistol");
 
-        RegistrationResponceLombokModel responce = step("Отправляем запрос на регистрацию пользователя", () ->
+        RegistrationResponceLombokModel registrationResponce = step("Отправляем запрос на регистрацию пользователя", () ->
             given(registrationRequestSpec)
                     .body(regData)
 
@@ -34,7 +34,7 @@ public class ReqresLombokTests extends TestBase {
                     .extract().as(RegistrationResponceLombokModel.class));
 
         step("Проверяем успешную регистрацию пользователя", () ->
-                assertThat(responce.getToken()).isAlphanumeric());
+                assertThat(registrationResponce.getToken()).isAlphanumeric());
     }
 
     @DisplayName("Запрос на попытку регистрации без пароля. POST - UNSUCCESSFUL REGISTRATION")
@@ -66,15 +66,15 @@ public class ReqresLombokTests extends TestBase {
 
         CreateResponceLombokModel responce = step("Отправляем запрос на изменение данных пользователя. Ожидаем статус код 201", () ->
             given()
-                .spec(createRequestSpec)
-                .body(createData)
+                    .spec(createRequestSpec)
+                    .body(createData)
 
             .when()
-                .post("/users")
+                    .post("/users")
 
             .then()
-                .spec(responseSpec201)
-                .extract().as(CreateResponceLombokModel.class));
+                    .spec(responseSpec201)
+                    .extract().as(CreateResponceLombokModel.class));
 
         step("Проверяем успешное изменение данных пользователя", () ->
                 {
@@ -86,21 +86,22 @@ public class ReqresLombokTests extends TestBase {
     @DisplayName("Запрос на поиск пользователя по id. GET - SINGLE USER")
     @Test
     void successfulFoundUserTest() {
-        FoundResponceUserLombokModel responce = step("Отправляем запрос на поиск пользователя по id. Ожидаем статус код 200", () ->
-        given(foundRequestSpec)
+        UserInfoModel responce = step("Отправляем запрос на поиск пользователя по id. Ожидаем статус код 200", () ->
+                given(foundRequestSpec)
 
-            .when()
-                .get("/users/7")
+               .when()
+                  .get("/users/7")
 
-            .then()
-                .spec(responseSpec200)
-                .extract().as(FoundResponceUserLombokModel.class));
+               .then()
+                    .spec(responseSpec200)
+                    .extract().as(UserInfoModel.class));
 
         step("Проверяем данные найденного пользователя", () ->
                 {
-                    assertEquals(responce.getData().get(0).getId(), 7);
-                    assertEquals(responce.getData().get(2).getFirst_name(), "Michael");
-                    assertEquals(responce.getData().get(3).getLast_name(), "Lawson");
+                    assertEquals(responce.getData().getId(), 7);
+                    assertEquals(responce.getData().getFirst_name(), "Michael");
+                    assertEquals(responce.getData().getLast_name(), "Lawson");
+                    assertEquals(responce.getData().getEmail(), "michael.lawson@reqres.in");
                 });
     }
 
@@ -108,11 +109,12 @@ public class ReqresLombokTests extends TestBase {
     @Test
     void unsuccessfulFoundUserTest() {
         step("Отправляем запрос на поиск несуществующего id пользователя. Ожидаем статус код 404", () ->
-        given(foundRequestSpec)
-            .when()
-                .get("/users/666")
+                given(foundRequestSpec)
 
-            .then()
-                .spec(responseSpec404));
+                .when()
+                    .get("/users/666")
+
+                .then()
+                    .spec(responseSpec404));
     }
 }

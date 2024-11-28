@@ -9,7 +9,8 @@ repositories {
 }
 
 def restAssuredVersion = "5.5.0",
-    allureVersion = "2.29.0"
+    allureVersion = "2.29.0",
+        selenideVersion = "7.4.2"
 
 allure {
     report {
@@ -30,6 +31,7 @@ dependencies {
             "io.rest-assured:rest-assured:$restAssuredVersion",
             "io.rest-assured:json-schema-validator:$restAssuredVersion",
             "io.qameta.allure:allure-rest-assured:$allureVersion",
+            "com.codeborne:selenide:$selenideVersion",
             "org.junit.jupiter:junit-jupiter:5.11.1",
             'org.assertj:assertj-core:3.26.3',
             'org.slf4j:slf4j-simple:2.0.16'
