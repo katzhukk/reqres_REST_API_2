@@ -13,22 +13,17 @@ import static io.restassured.http.ContentType.JSON;
 public class RegistrationSpec {
     public static RequestSpecification registrationRequestSpec = with()
             .filter(withCustomTemplates())
-            .log().uri()
-            .log().body()
-            .log().headers()
+            .log().all()
             .contentType(JSON);
 
     public static RequestSpecification createRequestSpec = with()
             .filter(withCustomTemplates())
-            .log().uri()
-            .log().body()
-            .log().headers()
+            .log().all()
             .contentType(JSON);
 
     public static RequestSpecification foundRequestSpec = with()
             .filter(withCustomTemplates())
-            .log().uri()
-            .log().body()
+            .log().all()
             .log().headers();
 
     public static ResponseSpecification responseSpec200 = new ResponseSpecBuilder()

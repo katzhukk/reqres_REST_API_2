@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RegistrationResponceLombokModel {
+public class RegistrationResponseLombokModel {
     String token;
 }

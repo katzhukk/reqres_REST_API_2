@@ -22,7 +22,7 @@ public class ReqresLombokTests extends TestBase {
         regData.setEmail("eve.holt@reqres.in");
         regData.setPassword("pistol");
 
-        RegistrationResponceLombokModel registrationResponce = step("Отправляем запрос на регистрацию пользователя", () ->
+        RegistrationResponseLombokModel registrationResponse = step("Отправляем запрос на регистрацию пользователя", () ->
             given(registrationRequestSpec)
                     .body(regData)
 
@@ -31,10 +31,10 @@ public class ReqresLombokTests extends TestBase {
 
                 .then()
                     .spec(responseSpec200)
-                    .extract().as(RegistrationResponceLombokModel.class));
+                    .extract().as(RegistrationResponseLombokModel.class));
 
         step("Проверяем успешную регистрацию пользователя", () ->
-                assertThat(registrationResponce.getToken()).isAlphanumeric());
+                assertThat(registrationResponse.getToken()).isAlphanumeric());
     }
 
     @DisplayName("Запрос на попытку регистрации без пароля. POST - UNSUCCESSFUL REGISTRATION")
@@ -64,7 +64,7 @@ public class ReqresLombokTests extends TestBase {
         createData.setName("marpheus");
         createData.setJob("leader");
 
-        CreateResponceLombokModel responce = step("Отправляем запрос на изменение данных пользователя. Ожидаем статус код 201", () ->
+        CreateResponseLombokModel response = step("Отправляем запрос на изменение данных пользователя. Ожидаем статус код 201", () ->
             given()
                     .spec(createRequestSpec)
                     .body(createData)
@@ -74,19 +74,19 @@ public class ReqresLombokTests extends TestBase {
 
             .then()
                     .spec(responseSpec201)
-                    .extract().as(CreateResponceLombokModel.class));
+                    .extract().as(CreateResponseLombokModel.class));
 
         step("Проверяем успешное изменение данных пользователя", () ->
                 {
-                    assertEquals(responce.getName(), "marpheus");
-                    assertEquals(responce.getJob(), "leader");
+                    assertEquals(response.getName(), "marpheus");
+                    assertEquals(response.getJob(), "leader");
                 });
     }
 
     @DisplayName("Запрос на поиск пользователя по id. GET - SINGLE USER")
     @Test
     void successfulFoundUserTest() {
-        UserInfoModel responce = step("Отправляем запрос на поиск пользователя по id. Ожидаем статус код 200", () ->
+        UserInfoModel response = step("Отправляем запрос на поиск пользователя по id. Ожидаем статус код 200", () ->
                 given(foundRequestSpec)
 
                .when()
@@ -98,10 +98,10 @@ public class ReqresLombokTests extends TestBase {
 
         step("Проверяем данные найденного пользователя", () ->
                 {
-                    assertEquals(responce.getData().getId(), 7);
-                    assertEquals(responce.getData().getFirst_name(), "Michael");
-                    assertEquals(responce.getData().getLast_name(), "Lawson");
-                    assertEquals(responce.getData().getEmail(), "michael.lawson@reqres.in");
+                    assertEquals(response.getData().getId(), 7);
+                    assertEquals(response.getData().getFirst_name(), "Michael");
+                    assertEquals(response.getData().getLast_name(), "Lawson");
+                    assertEquals(response.getData().getEmail(), "michael.lawson@reqres.in");
                 });
     }
 

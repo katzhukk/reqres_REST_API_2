@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserInfoModel {
-    DataResponceUserLombokModel data;
-    SupportResponceUserLombokModel support;
+    DataResponseUserLombokModel data;
+    SupportResponseUserLombokModel support;
 }

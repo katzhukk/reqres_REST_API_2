@@ -3,7 +3,7 @@ package models.lombok;
 import lombok.Data;
 
 @Data
-public class SupportResponceUserLombokModel {
+public class SupportResponseUserLombokModel {
     String url;
     String text;
 }
